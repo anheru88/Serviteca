@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/logo"
+        android:src="@drawable/logo2" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp" >
+
+        <TableRow android:padding="10dp" > 
+
+            <ImageButton
+                android:id="@+id/vehiculo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:paddingRight="5dp"
+                android:src="@drawable/auto" 
+                android:contentDescription="@string/registrar_vehiculo"/>
+
+            <ImageButton
+                android:id="@+id/compras"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:src="@drawable/compras"  
+                android:contentDescription="@string/orden_de_compra"/>
+        </TableRow>
+
+        <TableRow android:padding="10dp" >
+
+            <ImageButton
+                android:id="@+id/det"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:src="@drawable/detalles"
+                android:contentDescription="@string/detalles_de_compra"/>
+
+            <ImageButton
+                android:id="@+id/salir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:src="@drawable/salir"
+                android:contentDescription="@string/salir" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
