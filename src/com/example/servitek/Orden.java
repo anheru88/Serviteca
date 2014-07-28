@@ -206,15 +206,6 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 				&& servicio.getSelectedItemPosition() != 0) {
 
 			Cursor s = bd.BuscarServicio(servicio.getSelectedItemId());
-
-			/*
-			 * "_id  integer primary key autoincrement, " +
-			 * "codser char  not null , " + "nomser varchar  not null, " +
-			 * "codcue char not null, " + "valser Integer not null, " +
-			 * "ivaser	Integer not null, " + "tasacomis	Integer not null, " +
-			 * "codins	char not null, " + "concesion char null )";
-			 */
-
 			datos[0] = s.getString(1);
 			datos[1] = s.getString(2);
 			datos[2] = cantidad.getText().toString();
