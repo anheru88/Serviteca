@@ -179,7 +179,6 @@ public class Admin_BD {
 				"Codcolor", "Modelo", "Codclase" };
 		Cursor c = bd.query(Tabla_Movil, columnas, "placa =?",
 				new String[] { placa }, null, null, null);
-		c.moveToFirst();
 		return c;
 	}
 
@@ -226,6 +225,13 @@ public class Admin_BD {
 			bd.update(Tabla_Movil, valor, "placa =?", new String[] { placa });
 			return InsertarCliente(cc, nombre, dir, tel, dane, email);
 		}
+	}
+	
+	public Cursor BuscarServicio(long id) {
+		Leer();
+		Cursor c = bd.rawQuery(" SELECT * FROM Servicios WHERE _id =? ", new String[] { id+"" });
+		c.moveToFirst();
+		return c;
 	}
 
 }

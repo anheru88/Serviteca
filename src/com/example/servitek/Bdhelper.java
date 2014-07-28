@@ -31,7 +31,7 @@ public class Bdhelper extends SQLiteOpenHelper {
 			CargarTipos(db);
 			CargarMarcas(db);
 			CargarTecicos(db);
-			//CargarServicios(db);
+			CargarServicios(db);
 		} catch (Exception e) {
 			Toast.makeText(c,"error "+ e, Toast.LENGTH_SHORT).show();
 		}
@@ -40,11 +40,20 @@ public class Bdhelper extends SQLiteOpenHelper {
 
 	/*
 	 * ALINEACION LAVADO LUBRICACION BALANCEO
-	 */
-
-	/*private void CargarServicios(SQLiteDatabase db) {
-		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES (1258,'ALineacion',,,,,,) ");
-	}*/
+	 
+ codcue char(8)
+ nomcue varchar(50)
+ auxcue  bit
+ natcue char  QUE PUEDE SER 'D' O 'C' 
+	 
+*/
+	private void CargarServicios(SQLiteDatabase db) {
+		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('0','Servicios','A','0','0','0','B','c') ");
+		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('159','ALineacion','A','2000','320','50','B','c') ");
+		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('486','Lavado','A','3000','480','150','B','c') ");
+		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('795','Lubricacion','A','4000','720','200','B','c') ");
+		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('268','Balanceo','A','5000','880','250','B','c') ");
+	}
 
 	private void CargarTecicos(SQLiteDatabase db) {
 		db.execSQL("INSERT INTO Tecnicos (codtec,nomtec,dirtec,teltec) VALUES ('0','Tecnico','tecnico','tecnico')");

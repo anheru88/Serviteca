@@ -10,7 +10,7 @@ import android.view.Gravity;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class Campo extends TextView implements Parcelable {
+public class Campo extends TextView {
 	TableRow.LayoutParams part;
 	public Campo(Context c, String texto) {
 		super(c);
@@ -20,15 +20,5 @@ public class Campo extends TextView implements Parcelable {
 		this.setTextAppearance(c,R.style.etiqueta);
 		this.setBackgroundResource(R.drawable.tabla_celda);
 		this.setLayoutParams(part);
-	}
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		
 	}
 }
