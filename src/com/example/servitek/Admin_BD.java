@@ -91,10 +91,10 @@ public class Admin_BD {
 		ContentValues valores = new ContentValues();
 		valores.put("placa", placa);
 		valores.put("Codter", cc);
-		valores.put("Codmarca", CodigoMarcaId(marca));
+		valores.put("Codmarca", CodigoNombre("Mov_Marcas", marca));
 		valores.put("Codcolor", color);
 		valores.put("Modelo", modelo);
-		valores.put("Codclase", CodigoTipoId(tipo));
+		valores.put("Codclase", CodigoNombre("Mov_Clases", tipo));
 		return valores;
 	}
 
@@ -157,34 +157,16 @@ public class Admin_BD {
 		return c.getBlob(2);
 	}
 
-	private String CodigoTipoId(int id) throws SQLException {
-		String[] columna = { "_id", "codclase", "Nomclase" };
-		Cursor c = bd.query(Tabla_Clases, columna, "_id = " + id, null, null,
-				null, null);
+	private String CodigoNombre(String tabla, int id) {
+		Cursor c = bd.rawQuery("SELECT * FROM " + tabla + " WHERE _id =?",
+				new String[] { id + "" });
 		c.moveToFirst();
 		return c.getString(1);
 	}
 
-	public long CodigoTipo(String codigo) throws SQLException {
-		Cursor c = bd.rawQuery("SELECT * FROM Mov_Clases WHERE codclase ="
-				+ codigo, null);
-		if (c.moveToFirst() && c != null) {
-			return c.getLong(0);
-		}
-		return 0;
-	}
-
-	private String CodigoMarcaId(int id) {
-		String[] columna = { "_id", "codmarca", "nombre" };
-		Cursor c = bd.query(Tabla_Marcas, columna, "_id = " + id, null, null,
-				null, null);
-		c.moveToFirst();
-		return c.getString(1);
-	}
-
-	public long CodigoMarca(String codigo) throws SQLException {
-		Cursor c = bd.rawQuery("SELECT * FROM Mov_Marcas WHERE codmarca = "
-				+ codigo, null);
+	public long CodigoId(String tabla, String columna, String codigo) {
+		Cursor c = bd.rawQuery("SELECT * FROM " + tabla + " WHERE " + columna
+				+ " = " + codigo, null);
 		if (c.moveToFirst() && c != null) {
 			return c.getLong(0);
 		}
@@ -210,33 +192,14 @@ public class Admin_BD {
 		return c;
 	}
 
-	public Cursor SpinnerTipo() {
-		Leer();
-		Cursor c = bd.rawQuery(
-				"SELECT  rowid AS _id, Nomclase  FROM Mov_Clases", null);
+	public Cursor Spinner(String id, String columna, String tabla) {
+		Cursor c = bd.rawQuery("SELECT " + id + " AS _id, " + columna
+				+ " FROM " + tabla, null);
 		c.moveToFirst();
 		return c;
 	}
 
-	public Cursor SpinnerMarca() {
-		Cursor c = bd.rawQuery("SELECT  rowid AS _id, nombre  FROM Mov_Marcas",
-				null);
-		c.moveToFirst();
-		Cerrar();
-		return c;
-	}
-
-	public Cursor SpinnerTecnico() {
-		return null;
-
-	}
-
-	public Cursor SpinnerServicios() {
-		return null;
-
-	}
-
-	private void Escribir() {
+	public void Escribir() {
 		bd = helper.getWritableDatabase();
 	}
 
@@ -244,7 +207,7 @@ public class Admin_BD {
 		bd.close();
 	}
 
-	private void Leer() {
+	public void Leer() {
 		bd = helper.getReadableDatabase();
 	}
 
@@ -256,12 +219,12 @@ public class Admin_BD {
 			return bd.update(Tabla_Cliente,
 					ContenedorCliente(cc, nombre, dir, tel, dane, email),
 					"Codter =? ", new String[] { cc });
-		} else{
+		} else {
 			Log.i(tag, placa);
-		ContentValues valor = new ContentValues();
-		valor.put("Codter", cc);
-		bd.update(Tabla_Movil, valor, "placa =?", new String[] { placa });
-		return InsertarCliente(cc, nombre, dir, tel, dane, email);
+			ContentValues valor = new ContentValues();
+			valor.put("Codter", cc);
+			bd.update(Tabla_Movil, valor, "placa =?", new String[] { placa });
+			return InsertarCliente(cc, nombre, dir, tel, dane, email);
 		}
 	}
 

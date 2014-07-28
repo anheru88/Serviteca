@@ -133,18 +133,20 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 	}
 
 	private void Spinnerbd() {
-		Cursor tipos = bd.SpinnerTipo();
-		SimpleCursorAdapter adactador1 = new SimpleCursorAdapter(Vehiculo.this,
+		bd.Leer();
+		Cursor tipos = bd.Spinner("_id", "Nomclase", "Mov_Clases");
+		SimpleCursorAdapter adactador1 = new SimpleCursorAdapter(this,
 				android.R.layout.simple_spinner_dropdown_item, tipos,
 				new String[] { "Nomclase" }, new int[] { android.R.id.text1 },
 				0);
 		tipo.setAdapter(adactador1);
-
-		Cursor marcas = bd.SpinnerMarca();
-		SimpleCursorAdapter adactador2 = new SimpleCursorAdapter(Vehiculo.this,
+		
+		Cursor marcas = bd.Spinner("_id", "nombre", "Mov_Marcas");
+		SimpleCursorAdapter adactador2 = new SimpleCursorAdapter(this,
 				android.R.layout.simple_spinner_dropdown_item, marcas,
 				new String[] { "nombre" }, new int[] { android.R.id.text1 }, 0);
 		marca.setAdapter(adactador2);
+		bd.Cerrar();
 	}
 
 	@Override
@@ -264,8 +266,8 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 		direccion.setText(b.getString(3));
 		celular.setText(b.getString(4));
 		mail.setText(b.getString(6));
-		tipo.setSelection((int) bd.CodigoTipo(t));
-		marca.setSelection((int) bd.CodigoMarca(m));
+		tipo.setSelection((int) bd.CodigoId("Mov_Clases", "codclase", t));
+		marca.setSelection((int) bd.CodigoId("Mov_Marcas", "codmarca", m));
 		bd.Cerrar();
 		imagen.setImageBitmap(GetImage(i));
 	}

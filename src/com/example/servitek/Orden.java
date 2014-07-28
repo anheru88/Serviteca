@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.InputType;
@@ -46,12 +48,14 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 	int[] pre = { 0, 1500, 2000, 2500, 2200, 1600, 3000 };
 	String[] cod = { "0", "5485", "9856", "4257", "3254", "6581", "1248" };
 	ArrayList<Campo> campos;
+	Admin_BD bd;
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.orden);
+		bd = new Admin_BD(this);
 		init();
 	}
 
@@ -82,7 +86,8 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 		guardar.setOnClickListener(this);
 		agregar.setOnClickListener(this);
 		buscar.setOnClickListener(this);
-
+		CargarSpinner();
+		
 		servicio.setOnItemSelectedListener(new OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View v,
 					int position, long id) {
@@ -116,13 +121,62 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 			public void afterTextChanged(Editable s) {
 				String aux = s.toString();
 				if (aux.length() == 3) {
-					placa.setText(aux+"-");
-					placa.setInputType(InputType.TYPE_CLASS_NUMBER );
-					placa.setSelection(4);
+					placa.setText(aux + " - ");
+					placa.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+				} else if (aux.length() > 3 && aux.length() < 6) {
+					placa.setInputType(InputType.TYPE_CLASS_TEXT);
+					placa.setSelection(1);
+					placa.setText("");
+
+				}
+
+				if (!aux.equals(s.toString().toUpperCase())) {
+					aux = s.toString().toUpperCase();
+					placa.setText(aux);
+				}
+				placa.setSelection(placa.getText().length());
+
+				if (aux.length() == 9) {
+					Cursor c = bd.BuscarPlaca(aux);
+					if (c.moveToFirst()) {
+						LlenarCampos(c);
+						OculTeclado(placa);
+					} else {
+						Mensaje("Esta PLaca no ha sido registrada");
+					}
+
 				}
 			}
 		});
 
+	}
+
+	protected void OculTeclado(View v) {
+		InputMethodManager tecladoVirtual = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		tecladoVirtual.hideSoftInputFromWindow(v.getWindowToken(), 0);
+	}
+
+	protected void LlenarCampos(Cursor c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void CargarSpinner() {
+		bd.Leer();
+		Cursor tipos = bd.Spinner("_id", "nomtec", "Tecnicos");
+		SimpleCursorAdapter adactador1 = new SimpleCursorAdapter(this,
+				android.R.layout.simple_spinner_dropdown_item, tipos,
+				new String[] { "nomtec" }, new int[] { android.R.id.text1 },
+				0);
+		tecnico.setAdapter(adactador1);
+		
+		Cursor marcas = bd.Spinner("rowid", "nomser", "Servicios");
+		SimpleCursorAdapter adactador2 = new SimpleCursorAdapter(this,
+				android.R.layout.simple_spinner_dropdown_item, marcas,
+				new String[] { "nomser" }, new int[] { android.R.id.text1 }, 0);
+		servicio.setAdapter(adactador2);
+		bd.Cerrar();
 	}
 
 	@Override
@@ -193,7 +247,8 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 		TextView v = (TextView) toast.getView().findViewById(
 				android.R.id.message);
 		if (v != null)
-			v.setGravity(Gravity.CENTER);
+		v.setTextSize(10);
+		v.setGravity(Gravity.CENTER);
 		v.setTextColor(Color.rgb(225, 216, 79));
 		toast.show();
 	}
