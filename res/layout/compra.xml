@@ -7,40 +7,108 @@
     android:orientation="vertical"
     android:padding="5dp" >
 
-    <TableLayout
-        android:id="@+id/cabecera"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
-    </TableLayout>
+
+        <EditText
+            android:id="@+id/placa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/edittext_select"
+            android:hint="@string/placa"
+            android:maxLength="9"
+            android:textSize="60sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/borrar"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/borrar_pantalla"
+            android:src="@drawable/abc_ic_ab_back_holo_light" />
+    </RelativeLayout>
+
+    <TableRow
+        android:id="@+id/cabecera"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:weightSum="7" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/tabla_celda_cabecera"
+            android:gravity="center"
+            android:text="@string/servicio"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/tabla_celda_cabecera"
+            android:gravity="center"
+            android:text="@string/ver"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/tabla_celda_cabecera"
+            android:gravity="center"
+            android:text="@string/modificar"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/tabla_celda_cabecera"
+            android:gravity="center"
+            android:text="@string/eliminar"
+            android:textSize="15sp" />
+    </TableRow>
 
     <ScrollView
-        android:id="@+id/scroll"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:scrollbars="vertical" >
-            <TableLayout
-                android:id="@+id/tabla"
-                android:layout_width="match_parent"
-                android:gravity="center_horizontal"
-                android:layout_height="wrap_content" >
-            </TableLayout>
+        android:layout_width="fill_parent"
+        android:layout_height="550dp" >
+
+        <TableLayout
+            android:id="@+id/tabladetalles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:weightSum="7" >
+        </TableLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/agregar"
+    <LinearLayout
+        android:id="@+id/botones"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="agregar" />
-   
-    <Button
-        android:id="@+id/buscar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="buscar" />
-    
-    <Spinner 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/busca"/>
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
 
+        <Button
+            android:id="@+id/orden"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/nuevo" />
+
+        <Button
+            android:id="@+id/menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/menu" />
+    </LinearLayout>
 </LinearLayout>

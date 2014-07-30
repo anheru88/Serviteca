@@ -28,7 +28,7 @@
     <string name="fotovehiculo">Fotovehiculo</string>
     <string name="editar">Editar</string>
     <string name="color">Color</string>
-    <string name="borrar_pantalla">Borrar pantalla</string>
+    <string name="borrar_pantalla">Borrar pantalla</string> 
     <string name="logo_app">Logo de la app</string>
     <string name="contrase_a">Contraseña</string>
     <string name="entrar">Entrar</string>
@@ -37,6 +37,10 @@
     <string name="registrar_vehiculo">Registrar vehiculo</string>
     <string name="orden_de_compra">Orden de compra</string>
     <string name="salir">Salir</string>
+    <string name="modificar">EDITAR</string> 
+    <string name="eliminar">ELIMINAR</string>
+    <string name="ver">VER</string>
     <string name="detalles_de_compra">Detalles de compra</string>
+    <string name="nuevo">Nuevo</string>
 
 </resources>

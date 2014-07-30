@@ -87,7 +87,7 @@
        <activity
            android:name="com.example.servitek.Compra"
            android:configChanges="keyboard|keyboardHidden|orientation"
-           android:label="Tabla"
+           android:label="Detalles"
            android:screenOrientation="portrait" >
            <intent-filter>
                <action android:name="com.example.servitek.COMPRA" />
