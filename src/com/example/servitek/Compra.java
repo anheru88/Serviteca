@@ -2,32 +2,37 @@ package com.example.servitek;
 
 
 
+import java.sql.ResultSet;
+
+import com.bd.sql.HiloAsyn;
+import com.bd.sql.HiloResponde;
 import android.app.Activity;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.Toast;
 
 
-public class Compra extends Activity {
 
-	TableLayout tabla;
-	TableLayout cabecera;
-	TableRow.LayoutParams layoutFila;
-	TableRow.LayoutParams layoutId;
-	TableRow.LayoutParams layoutTexto;
-	TableRow.LayoutParams layoutOtro;
-	Button agregar;
-	int uno = 0;
+public class Compra extends Activity implements HiloResponde {
 
-	Resources rs;
+	Thread eje;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.compra);
-		
+		SincronizarDB();
+	}
 
+
+	private void SincronizarDB() {
+		new HiloAsyn(this).execute();
+	}
+
+
+	@Override
+	public void Resultado(ResultSet r) {
+		Toast.makeText(this, "termino", Toast.LENGTH_SHORT)
+		.show();
 	}
 }

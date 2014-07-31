@@ -136,6 +136,7 @@ public class Admin_BD {
 			long v1 = InsertarMovil(placa, cc, marca, color, modelo, tipo);
 			long v3 = FotoCarro(placa, image);
 			long v2 = InsertarCliente(cc, nombre, dir, tel, coddane, mail);
+			
 			if (v1 == -1 && v2 == -1 && v3 == -1) {
 				Cerrar();
 				return false;
@@ -234,5 +235,7 @@ public class Admin_BD {
 		c.moveToFirst();
 		return c;
 	}
+	
+	
 
 }
