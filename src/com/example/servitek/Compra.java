@@ -4,15 +4,16 @@ package com.example.servitek;
 
 import java.sql.ResultSet;
 
-import com.bd.sql.HiloAsyn;
-import com.bd.sql.HiloResponde;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.bd.sql.HiloAsyn;
+import com.bd.sql.HiloListener;
 
 
-public class Compra extends Activity implements HiloResponde {
+
+public class Compra extends Activity implements HiloListener {
 
 	Thread eje;
 
@@ -25,8 +26,8 @@ public class Compra extends Activity implements HiloResponde {
 	}
 
 
-	private void SincronizarDB() {
-		new HiloAsyn(this).execute();
+	private void SincronizarDB(){
+		new HiloAsyn(Compra.this, true, this).execute("INSERT vehiculo (Placa,Codter,Codmarca,Codcolor,Modelo,Codclase) VALUES ('PTR - 024','1047389512',4587,45851823,1478,7892)");
 	}
 
 
@@ -34,5 +35,14 @@ public class Compra extends Activity implements HiloResponde {
 	public void Resultado(ResultSet r) {
 		Toast.makeText(this, "termino", Toast.LENGTH_SHORT)
 		.show();
+	}
+
+
+	@Override
+	public void Confir(boolean s) {
+		if (s) {
+			Toast.makeText(this, "save", Toast.LENGTH_SHORT)
+			.show();
+		}
 	}
 }

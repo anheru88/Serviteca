@@ -6,22 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
-
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 public class BDsqlServer {
 
-	private static final String url = "jdbc:jtds:aqlserver://190.255.217.180:1433/Serviteka";
-	private static final String user = "sa";
-	private static final String password = "master";
-	Connection com = null;
-	Context context;
+	private static final String url = "jdbc:jtds:sqlserver://Serviteka.mssql.somee.com:1433/Serviteka";
+	private static final String user = "1047389512_SQLLogin_1";
+	private static final String password = "qikxi5vux3";
+	public Connection com = null;
 
-	public BDsqlServer(Context context) {
-		this.context = context;
+	public BDsqlServer() {
 		Conectar();
 	}
 
@@ -29,34 +23,55 @@ public class BDsqlServer {
 		try {
 			Class.forName("net.sourceforge.jtds.jdbc.Driver").newInstance();
 			com = DriverManager.getConnection(url, user, password);
-			Toast.makeText(context, "Conectando...", Toast.LENGTH_SHORT).show();
 		} catch (SQLException e) {
-			Log.e("SQLException", e+"");
+			Log.e("SQLException", e + "");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			Log.e("ClassNotFoundException", e+"");
+			Log.e("ClassNotFoundException", e + "");
+			e.printStackTrace();
 		} catch (InstantiationException e) {
-			Log.e("InstantiationException", e+"");
+			Log.e("InstantiationException", e + "");
+			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			Log.e("IllegalAccessException", e+"");
+			Log.e("IllegalAccessException", e + "");
+			e.printStackTrace();
 		}
 	}
 
-	public ResultSet Enviar(String stsql) {
+	public void Insertar(String stsql) {
+		Statement st;
+		if (com != null) {
+			try {
+				st = com.createStatement();
+				st.execute(stsql);
+			} catch (SQLException e) {
+				Log.i("Coneccion", e + "");
+				return;
+			}
+		}
+	}
+
+	public ResultSet Consultar(String stsql) {
 		Statement st;
 		ResultSet rs = null;
 		if (com != null) {
-			 
 			try {
 				st = com.createStatement();
 				rs = st.executeQuery(stsql);
 				com.close();
 			} catch (SQLException e) {
-				Toast.makeText(context, "Fallo la Coneccion", Toast.LENGTH_SHORT)
-				.show();
+				Log.i("Coneccion", e + "");
+				return rs;
 			}
 		}
 		return rs;
+	}
 
+	public void CerrarConeccion() {
+		try {
+			com.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
