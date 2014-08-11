@@ -298,6 +298,7 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 	@Override
 	protected void onActivityResult(int RequesCode, int ResultCode, Intent data) {
 		super.onActivityResult(RequesCode, ResultCode, data);
+		bd.Escribir();
 		if (ResultCode == Activity.RESULT_OK) {
 			Bundle ext = data.getExtras();
 			Bitmap bmt = (Bitmap) ext.get("data");
