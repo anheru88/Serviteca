@@ -112,6 +112,30 @@
                 android:src="@drawable/com" />
         </LinearLayout>
     </LinearLayout>
+    
+    <LinearLayout android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="5dp">
+        
+         <TextView 
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:background="#E1D84F"
+        style="@style/AppTheme"
+        android:text="@string/No"/>
+        
+        <TextView 
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/numorden"
+        android:background="#E1D84F"
+        style="@style/AppTheme"
+        android:layout_marginLeft="5dp"/>
+        
+    </LinearLayout>
+    
 
     <TableRow
         android:id="@+id/cabecera"
@@ -144,7 +168,7 @@
             android:layout_weight="1"
             android:background="@drawable/tabla_celda_cabecera"
             android:gravity="center"
-            android:text="@string/cantidad"
+            android:text="@string/Can"
             android:textSize="15sp" />
 
         <TextView
@@ -186,7 +210,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="250dp" >
+        android:layout_height="220dp" >
 
         <TableLayout
             android:id="@+id/tabladetalles"
@@ -204,7 +228,7 @@
         android:layout_marginTop="10dp"
         android:orientation="vertical" >
 
-        <ImageView
+        <ImageButton
             android:id="@+id/foto"
             android:layout_width="200sp"
             android:layout_height="200dp"
@@ -212,7 +236,7 @@
             android:adjustViewBounds="true"
             android:background="#E1D84F"
             android:contentDescription="@string/todo"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_launcherg" />
     </LinearLayout>
 
     <LinearLayout

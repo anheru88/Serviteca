@@ -1,30 +1,30 @@
 package com.servitek.vistas;
 
-import java.util.ArrayList;
-
 import com.clases.controladores.Admin_BD;
+import com.clases.controladores.BuscarItem;
 import com.clases.controladores.Campo;
+import com.clases.controladores.DBimagen;
+import com.clases.controladores.Fecha;
+import com.clases.controladores.MensajeToast;
 import com.example.servitek.R;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,43 +32,87 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Orden extends ActionBarActivity implements OnClickListener {
 
-	EditText placa, cedula, nombre, cantidad;
-	TextView precio;
+	EditText cedula, nombre, cantidad;
+	AutoCompleteTextView placa;
+	TextView precio, numorden;
 	Spinner servicio, tecnico;
 	Button guardar, menu;
-	ImageButton agregar, borrar;
+	ImageButton agregar, borrar,imagen;
 	TableLayout tabla;
 	TableRow.LayoutParams layoutFila;
-	TableRow.LayoutParams layoutId;
-	int[] pre = { 0, 1500, 2000, 2500, 2200, 1600, 3000 };
-	String[] cod = { "0", "5485", "9856", "4257", "3254", "6581", "1248" };
-	ArrayList<Campo> campos;
 	Admin_BD bd;
+	BuscarItem buscar;
+	private ProgressDialog pd;
+	Cursor s;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.orden);
 		bd = new Admin_BD(this);
+		bd.Escribir();
+		BusquedaAuto();
 		init();
 	}
 
+	private void BusquedaAuto() {
+		placa = (AutoCompleteTextView) findViewById(R.id.Autocom);
+		placa.setThreshold(1);
+		Cursor cursor = bd.AutoComplete("");
+		buscar = new BuscarItem(getApplicationContext(), cursor);
+		placa.setAdapter(buscar);
+		placa.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				String aux = s.toString();
+				if (aux.length() == 3) {
+					placa.setText(aux + " - ");
+					placa.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+				} else if (aux.length() > 3 && aux.length() < 6) {
+					placa.setInputType(InputType.TYPE_CLASS_TEXT);
+					placa.setSelection(1);
+					placa.setText("");
+				}
+
+				if (!aux.equals(s.toString().toUpperCase())) {
+					aux = s.toString().toUpperCase();
+					placa.setText(aux);
+				}
+				placa.setSelection(placa.getText().length());
+				if (aux.length() == 9) {
+					BuscarRegistro(aux);
+				}
+			}
+		});
+	}
+	
 	private void init() {
-		campos = new ArrayList<Campo>();
-		placa = (EditText) findViewById(R.id.placa);
 		cedula = (EditText) findViewById(R.id.cedula);
 		nombre = (EditText) findViewById(R.id.nombre);
 		menu = (Button) findViewById(R.id.menu);
+		imagen = (ImageButton) findViewById(R.id.foto);
 		guardar = (Button) findViewById(R.id.guardar);
 		servicio = (Spinner) findViewById(R.id.servi);
 		cantidad = (EditText) findViewById(R.id.Cantidad);
 		agregar = (ImageButton) findViewById(R.id.agregar);
 		borrar = (ImageButton) findViewById(R.id.limpiar);
 		precio = (TextView) findViewById(R.id.Precio);
+		numorden = (TextView) findViewById(R.id.numorden);
 		tecnico = (Spinner) findViewById(R.id.tecnicos);
 
 		tabla = (TableLayout) findViewById(R.id.tabladetalles);
@@ -85,67 +129,33 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 		servicio.setOnItemSelectedListener(new OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View v,
 					int position, long id) {
-				precio.setText(String.valueOf(pre[position]));
-				System.out.print(position);
 				if (position > 0) {
 					cantidad.setText(1 + "");
+					s = bd.BuscarServicio("_id",(position+1)+"");
+					precio.setText(s.getInt(4)+"");
+				}else{
+					s = null;
 				}
 			}
-
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
 
-		placa.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				String aux = s.toString();
-				if (aux.length() == 3) {
-					placa.setText(aux + " - ");
-					placa.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-				} else if (aux.length() > 3 && aux.length() < 6) {
-					placa.setInputType(InputType.TYPE_CLASS_TEXT);
-					placa.setSelection(1);
-					placa.setText("");
-
-				}
-
-				if (!aux.equals(s.toString().toUpperCase())) {
-					aux = s.toString().toUpperCase();
-					placa.setText(aux);
-				}
-				placa.setSelection(placa.getText().length());
-
-				if (aux.length() == 9) {
-					Cursor c = bd.BuscarPlaca(aux);
-					if (c.moveToFirst()) {
-						LlenarCampos(c);
-						placa.setFocusable(false);
-						OcultaTeclado(placa);
-						ComponentesActivar(true);
-					} else {
-						Mensaje("Esta PLaca no ha sido registrada");
-					}
-				}
-			}
-		});
-
+	}
+	
+	protected void BuscarRegistro(String aux) {
+		Cursor c = bd.BuscarPlaca(aux);
+		if (c.moveToFirst()) {
+			LlenarCampos(c);
+			placa.setFocusable(false);
+			OcultaTeclado(placa);
+			ComponentesActivar(true);
+			jj.execute(placa.getText().toString());
+		} else {
+			MensajeToast.MensajeCorto(Orden.this,
+					"Esta placa no ha sido registrada");
+		}
+		
 	}
 
 	protected void ComponentesActivar(boolean b) {
@@ -157,13 +167,14 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 	}
 
 	protected void LlenarCampos(Cursor c) {
+		byte[] i = bd.BuscarImagen(c.getString(1));
 		cedula.setText(c.getString(2));
 		Cursor b = bd.BuscarCliente(c.getString(2));
 		nombre.setText(b.getString(2));
+		imagen.setImageBitmap(DBimagen.GetImage(i)); 
 	}
 
 	private void CargarSpinner() {
-		bd.Leer();
 		Cursor tipos = bd.Cursor("_id", "nomtec", "Tecnicos");
 		SimpleCursorAdapter adactador1 = new SimpleCursorAdapter(this,
 				android.R.layout.simple_spinner_dropdown_item, tipos,
@@ -179,7 +190,6 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 		servicio.setEnabled(false);
 		agregar.setEnabled(false);
 		cantidad.setEnabled(false);
-		bd.Cerrar();
 	}
 
 	@Override
@@ -208,39 +218,39 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 		String[] datos = new String[7];
 		if (!cantidad.getText().toString().equals("")
 				&& servicio.getSelectedItemPosition() != 0) {
-
-			Cursor s = bd.BuscarServicio(servicio.getSelectedItemId());
 			datos[0] = s.getString(1);
 			datos[1] = s.getString(2);
 			datos[2] = cantidad.getText().toString();
 			datos[3] = s.getInt(4) + "";
-			datos[4] = s.getInt(4) * Integer.parseInt(cantidad.getText().toString()) + "";
-			datos[5] = s.getInt(5) * Integer.parseInt(cantidad.getText().toString()) + "";
+			datos[4] = s.getInt(4)
+					* Integer.parseInt(cantidad.getText().toString()) + "";
+			datos[5] = s.getInt(5)
+					* Integer.parseInt(cantidad.getText().toString()) + "";
 			datos[6] = (s.getInt(4) + s.getInt(5)) + "";
 			crearfila(datos);
+			if (numorden.getText().toString().equals("")) {
+				int id = bd.OrdeneCompra(placa.getText().toString(), 0, datos);
+				numorden.setText(id+"");
+			} else { 
+				bd.OrdeneCompra(placa.getText().toString(), Integer.parseInt(numorden.getText().toString()), datos); 
+			}
+			
 			cantidad.setText("");
 			servicio.setSelection(0);
-			bd.Cerrar();
+			s = null;
 		} else {
-			Mensaje("Llene todos los campos");
+			MensajeToast.MensajeCorto(this, "Llene todos los campos");
 		}
 	}
 
 	private void crearfila(String[] datos) {
 		TableRow fila = new TableRow(Orden.this);
 		fila.setLayoutParams(layoutFila);
-		for (int i1 = 0; i1 < 7; i1++) {
+		for (int i1 = 0; i1 < datos.length; i1++) {
 			Campo aux = new Campo(this, datos[i1]);
-			campos.add(aux);
 			fila.addView(aux);
 		}
 		tabla.addView(fila);
-		Mensaje("Requerimineto Agregado");
-	}
-
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
 	}
 
 	private void OcultaTeclado(View v) {
@@ -248,16 +258,57 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 		tecladoVirtual.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
 	}
-
-	private void Mensaje(String mensaje) {
-		Toast toast = Toast.makeText(this, mensaje, Toast.LENGTH_SHORT);
-		TextView v = (TextView) toast.getView().findViewById(
-				android.R.id.message);
-		if (v != null)
-			v.setTextSize(20);
-		v.setGravity(Gravity.CENTER);
-		v.setTextColor(Color.rgb(225, 216, 79));
-		toast.show();
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		bd.Cerrar();
+		
 	}
+	
+	
+	private  AsyncTask<String, Void, Long> jj = new AsyncTask<String, Void, Long>(){
+		
+		@Override
+		protected void onPreExecute() {
+			pd = ProgressDialog.show(Orden.this, "Buscando",
+					"Espere unos segundos...", true, false);
+		}
 
+		@Override
+		protected Long doInBackground(String... params) {
+			Long i = Long.valueOf(bd.BuscarOrden(placa.getText().toString(), Fecha.facha()));
+			return i;	
+		}
+
+		@Override
+		protected void onPostExecute(Long result) {
+			pd.dismiss();
+			if (result > 0 ) {
+				numorden.setText(""+result);
+				Detalles(bd.GetDetalles((long)result));
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			MensajeToast.MensajeCorto(Orden.this, "Tarea cancelada");
+		}
+		
+	};
+
+	protected void Detalles(Cursor c) {
+		while (c.moveToNext()){
+			String[] str = new String[7];
+            str[0] = c.getString(c.getColumnIndexOrThrow("codser"));
+            Cursor o = bd.BuscarServicio("codser",str[0]);
+            str[1] = o.getString(o.getColumnIndexOrThrow("nomser"));
+            str[2] = c.getInt(c.getColumnIndexOrThrow("cantd"))+"";
+            str[3] = o.getInt(o.getColumnIndexOrThrow("valser"))+"";
+            str[4] = c.getInt(c.getColumnIndexOrThrow("subtal"))+"";
+            str[5] = c.getInt(c.getColumnIndexOrThrow("iva"))+"";
+            str[6] = c.getInt(c.getColumnIndexOrThrow("total"))+"";
+            crearfila(str);            
+         }
+	}
 }

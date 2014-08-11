@@ -1,6 +1,5 @@
 package com.servitek.vistas;
 
-
 import com.example.servitek.R;
 
 import android.app.Activity;
@@ -11,6 +10,7 @@ import android.os.Handler;
 public class SplashActivity extends Activity{
 	
 	 private final int DURACION_SPLASH = 3000; 
+
 	 
 	  @Override
 	    public void onCreate(Bundle savedInstanceState) {

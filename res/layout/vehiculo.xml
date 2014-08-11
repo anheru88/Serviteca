@@ -154,7 +154,7 @@
                 android:adjustViewBounds="true"
                 android:background="#E1D84F"
                 android:contentDescription="@string/fotovehiculo"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcherg" />
         </LinearLayout>
 
         <LinearLayout

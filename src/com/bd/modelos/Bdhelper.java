@@ -6,7 +6,7 @@ import com.clases.controladores.Admin_BD;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
+import android.util.Log;
 
 public class Bdhelper extends SQLiteOpenHelper {
 
@@ -30,26 +30,18 @@ public class Bdhelper extends SQLiteOpenHelper {
 			db.execSQL(Admin_BD.sql6);
 			db.execSQL(Admin_BD.sql7);
 			db.execSQL(Admin_BD.sql8);
+			db.execSQL(Admin_BD.sql9);
+			db.execSQL(Admin_BD.sql10);
 			
 			CargarTipos(db);
 			CargarMarcas(db);
 			CargarTecicos(db);
 			CargarServicios(db);
 		} catch (Exception e) {
-			Toast.makeText(c,"error "+ e, Toast.LENGTH_SHORT).show();
+			Log.d("bd", e+"");
 		}
 		
 	}
-
-	/*
-	 * ALINEACION LAVADO LUBRICACION BALANCEO
-	 
- codcue char(8)
- nomcue varchar(50)
- auxcue  bit
- natcue char  QUE PUEDE SER 'D' O 'C' 
-	 
-*/
 	private void CargarServicios(SQLiteDatabase db) {
 		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('0','Servicios','A','0','0','0','B','c') ");
 		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('159','ALineacion','A','2000','320','50','B','c') ");
@@ -98,7 +90,6 @@ public class Bdhelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS Mov_Colores");
 		db.execSQL("DROP TABLE IF EXISTS Mov_Clases");
 		db.execSQL("DROP TABLE IF EXISTS Mov_Imagenes");
-		
 		onCreate(db);
 
 	}

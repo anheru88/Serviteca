@@ -2,12 +2,12 @@
 <resources>
 
     <string name="app_name">Servitek</string>
-    <string name="Placa">Placa</string>
     <string name="Nombre">Nombre:</string>
     <string name="Cedula">Cedula:</string>
     <string name="codigo">CODIGO</string>
     <string name="servicio">SERVICIO</string>
     <string name="cantidad">Cantidad</string>
+    <string name="Can">CANTIDAD</string>
     <string name="unidad">UNIDAD</string> 
     <string name="precio">PRECIO</string>
     <string name="todo">TODO</string>
@@ -38,9 +38,15 @@
     <string name="orden_de_compra">Orden de compra</string>
     <string name="salir">Salir</string>
     <string name="modificar">EDITAR</string> 
-    <string name="eliminar">ELIMINAR</string>
+    <string name="estado">E</string>
+    <string name="syncro">S</string>
     <string name="ver">VER</string>
     <string name="detalles_de_compra">Detalles de compra</string>
     <string name="nuevo">Nuevo</string>
+    <string name="No">N°</string>
+    <string name="sing_in">Sing In</string>
+    <string name="remenber_me">Remenber me</string>
+    <string name="pla">PLACA</string>
+    <string name="valor">VALOR</string>
 
 </resources>

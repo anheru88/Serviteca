@@ -1,6 +1,7 @@
 package com.servitek.vistas;
 
 
+import com.clases.controladores.Admin_BD;
 import com.example.servitek.R;
 
 import android.content.Intent;
@@ -18,12 +19,14 @@ public class Login extends ActionBarActivity {
 
 	Button boton;
 	EditText user,password;
-
+	Admin_BD db;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		
+		db = new Admin_BD(this);
+		db.Escribir();
 		user = (EditText) findViewById(R.id.user);
 		password = (EditText) findViewById(R.id.pass);
 		boton = (Button) findViewById(R.id.bvehi);
@@ -34,6 +37,7 @@ public class Login extends ActionBarActivity {
 				//if (user.getText().toString().equals("admin") && password.getText().toString().equals("admin")) {
 					Intent intent = new Intent("com.example.servitek.ACCION");
 					startActivity(intent);
+					db.Cerrar();
 				//} else {
 					//Toast toast = Toast.makeText(Login.this, "Usuario o Password invalidos", Toast.LENGTH_SHORT);
 			       // toast.show(); 
@@ -60,4 +64,11 @@ public class Login extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		db.Cerrar();
+	}
+	
 }
