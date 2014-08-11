@@ -1,11 +1,11 @@
 package com.servitek.vistas;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,6 +16,7 @@ import com.clases.controladores.Admin_BD;
 import com.clases.controladores.BuscarItem;
 import com.clases.controladores.Campo;
 import com.clases.controladores.Dialogo;
+import com.clases.controladores.Util;
 import com.example.servitek.R;
 
 public class Compra extends Activity implements OnClickListener {
@@ -55,7 +56,7 @@ public class Compra extends Activity implements OnClickListener {
 	private Thread fondo = new Thread(new Runnable() {
 		@Override
 		public void run() {
-			Cursor c = bd.BuscarOrdenDia("2014-08-08");
+			Cursor c = bd.BuscarOrdenDia(Util.facha());
 			Detalles(c);
 		}
 	});
@@ -82,7 +83,12 @@ public class Compra extends Activity implements OnClickListener {
 				aux.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						Log.i("loggggggg", datos[0]);
+						Intent i = new Intent("com.example.servitek.EDITAR" );
+						Bundle b = new Bundle();
+						b.putString("orden", datos[0]);
+						b.putString("placa", datos[1]);
+				        i.putExtras(b);
+				        startActivity(i);
 					}
 				});
 				fila.addView(aux);

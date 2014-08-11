@@ -64,13 +64,14 @@
                 android:layout_height="wrap_content">
 
                 <CheckBox
-                    android:id="@+id/ChkMarcame"
+                    android:id="@+id/check"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:checked="false" 
                     android:text="@string/remenber_me" 
-                    android:layout_alignParentLeft="true"/>
+                    android:layout_alignParentLeft="true"
+                    android:button="@drawable/check_box"/>
 
                 <Button
                     android:id="@+id/bvehi"

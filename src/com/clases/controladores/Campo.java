@@ -23,7 +23,7 @@ public class Campo extends TextView {
 	}
 	
 	public Campo(Context c, int in) {
-		super(c);
+		super(c);  
 		part = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.WRAP_CONTENT, 1.0f);
 		setGravity(Gravity.CENTER);
 		setTextAppearance(c,R.style.detalles);

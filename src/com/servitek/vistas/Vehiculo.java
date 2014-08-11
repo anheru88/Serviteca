@@ -2,9 +2,9 @@ package com.servitek.vistas;
 
 import com.clases.controladores.Admin_BD;
 import com.clases.controladores.BuscarItem;
-import com.clases.controladores.CarColor;
 import com.clases.controladores.DBimagen;
 import com.clases.controladores.MensajeToast;
+import com.clases.controladores.Util;
 import com.example.servitek.R;
 
 import android.app.Activity;
@@ -291,8 +291,7 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 
 	private void color_carro() {
 		Bitmap color = ((BitmapDrawable) imagen.getDrawable()).getBitmap();
-		CarColor j = new CarColor(color);
-		j.GetColor();
+		Util.GetColor(color);
 	}
 
 	@Override

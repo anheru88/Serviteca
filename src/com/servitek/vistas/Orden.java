@@ -4,8 +4,8 @@ import com.clases.controladores.Admin_BD;
 import com.clases.controladores.BuscarItem;
 import com.clases.controladores.Campo;
 import com.clases.controladores.DBimagen;
-import com.clases.controladores.Fecha;
 import com.clases.controladores.MensajeToast;
+import com.clases.controladores.Util;
 import com.example.servitek.R;
 
 import android.app.ProgressDialog;
@@ -277,7 +277,7 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 
 		@Override
 		protected Long doInBackground(String... params) {
-			Long i = Long.valueOf(bd.BuscarOrden(placa.getText().toString(), Fecha.facha()));
+			Long i = Long.valueOf(bd.BuscarOrden(placa.getText().toString(), Util.facha()));
 			return i;	
 		}
 
