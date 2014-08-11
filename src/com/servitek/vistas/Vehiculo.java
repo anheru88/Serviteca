@@ -15,6 +15,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -37,9 +39,9 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 	Button color, guardar, menu, editar;
 	ImageButton borrar, imagen;
 	Intent camara;
-	TextView carcolor;
+	static TextView carcolor;
 	final static int cons = 0;
-	int cc = 0;
+	static int cc = 0;
 	Admin_BD bd;
 	boolean sw = true;
 	BuscarItem buscar;
@@ -160,6 +162,7 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 		int key = v.getId();
 		switch (key) {
 		case R.id.foto:
+			bd.Cerrar();
 			camara = new Intent(
 					android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(camara, cons);
@@ -266,6 +269,8 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 		tipo.setSelection((int) bd.CodigoId("Mov_Clases", "codclase", t));
 		marca.setSelection((int) bd.CodigoId("Mov_Marcas", "codmarca", m));
 		imagen.setImageBitmap(DBimagen.GetImage(i));
+		b.close();
+		c.close();
 	}
 
 	private void DesAct(boolean b1, boolean b2) {
@@ -287,8 +292,7 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 	private void color_carro() {
 		Bitmap color = ((BitmapDrawable) imagen.getDrawable()).getBitmap();
 		CarColor j = new CarColor(color);
-		cc = j.GetColor();
-		carcolor.setBackgroundColor(cc);
+		j.GetColor();
 	}
 
 	@Override
@@ -306,4 +310,11 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 		super.onDestroy();
 		bd.Cerrar();
 	}
+	
+	public static Handler puente = new Handler() {
+		public void handleMessage(Message msg) {
+			cc = (Integer) msg.obj;
+			carcolor.setBackgroundColor(cc);
+		}
+	};
 }
