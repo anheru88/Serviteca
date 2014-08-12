@@ -38,7 +38,7 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 	AutoCompleteTextView placa;
 	TextView precio, numorden;
 	Spinner servicio, tecnico;
-	Button guardar, menu;
+	Button  menu;
 	ImageButton agregar, borrar,imagen;
 	TableLayout tabla;
 	TableRow.LayoutParams layoutFila;
@@ -105,7 +105,6 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 		nombre = (EditText) findViewById(R.id.nombre);
 		menu = (Button) findViewById(R.id.menu);
 		imagen = (ImageButton) findViewById(R.id.foto);
-		guardar = (Button) findViewById(R.id.guardar);
 		servicio = (Spinner) findViewById(R.id.servi);
 		cantidad = (EditText) findViewById(R.id.Cantidad);
 		agregar = (ImageButton) findViewById(R.id.agregar);
@@ -120,7 +119,6 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 				TableRow.LayoutParams.WRAP_CONTENT);
 
 		menu.setOnClickListener(this);
-		guardar.setOnClickListener(this);
 		agregar.setOnClickListener(this);
 		borrar.setOnClickListener(this);
 		CargarSpinner();
@@ -204,10 +202,7 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 			startActivity(acc);
 			break;
 		case R.id.limpiar:
-			OcultaTeclado(v);
-			break;
-		case R.id.guardar:
-			OcultaTeclado(v);
+			Reset();
 			break;
 		}
 
@@ -309,5 +304,11 @@ public class Orden extends ActionBarActivity implements OnClickListener {
             str[6] = c.getInt(c.getColumnIndexOrThrow("total"))+"";
             crearfila(str);            
          }
+	}
+	
+	private void Reset() {
+		Intent intent = getIntent();
+		finish();
+		startActivity(intent);
 	}
 }

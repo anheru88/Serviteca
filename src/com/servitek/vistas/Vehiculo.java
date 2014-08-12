@@ -175,7 +175,7 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 			OculTeclado(v);
 			break;
 		case R.id.borrar:
-			VaciarCampos();
+			Reset();
 			placa.setInputType(InputType.TYPE_CLASS_TEXT);
 			DesAct(true, true);
 			break;
@@ -202,7 +202,7 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 					.getText().toString(), "hola", mail.getText().toString(),
 					placa.getText().toString()) != -1) {
 				Util.MensajeCorto(this, "Edicion Exitosa");
-				VaciarCampos();
+				Reset();
 			}
 		}
 
@@ -227,8 +227,7 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 							.GetBytes(((BitmapDrawable) imagen.getDrawable())
 									.getBitmap()), sw)) {
 				Util.MensajeCorto(this, "Registro Exitoso");
-				VaciarCampos();
-				placa.setInputType(InputType.TYPE_CLASS_TEXT);
+				Reset();
 			} else {
 				Util.MensajeCorto(this, "Error al registrar");
 			}
@@ -237,20 +236,6 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 			
 			Util.MensajeCorto(this, "Llene todos los campos");
 		}
-	}
-
-	private void VaciarCampos() {
-		placa.setText("");
-		cedula.setText("");
-		nombre.setText("");
-		direccion.setText("");
-		celular.setText("");
-		mail.setText("");
-		modelo.setText("");
-		tipo.setSelection(0);
-		marca.setSelection(0);
-		carcolor.setBackgroundColor(Color.rgb(255, 255, 255));
-		imagen.setImageDrawable(null);
 	}
 
 	protected void LlenarCampos(Cursor c) {
@@ -316,4 +301,10 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 			carcolor.setBackgroundColor(cc);
 		}
 	};
+	
+	private void Reset() {
+		Intent intent = getIntent();
+		finish();
+		startActivity(intent);
+	}
 }

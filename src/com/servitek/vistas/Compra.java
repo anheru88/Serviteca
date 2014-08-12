@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -74,7 +75,7 @@ public class Compra extends Activity implements OnClickListener {
 				aux.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						new Dialogo(Compra.this,datos[0],datos[1], bd).show();
+						new Dialogo(Compra.this, datos[0], datos[1], bd).show();
 					}
 				});
 				fila.addView(aux);
@@ -83,12 +84,12 @@ public class Compra extends Activity implements OnClickListener {
 				aux.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						Intent i = new Intent("com.example.servitek.EDITAR" );
+						Intent i = new Intent("com.example.servitek.EDITAR");
 						Bundle b = new Bundle();
 						b.putString("orden", datos[0]);
 						b.putString("placa", datos[1]);
-				        i.putExtras(b);
-				        startActivity(i);
+						i.putExtras(b);
+						startActivity(i);
 					}
 				});
 				fila.addView(aux);
@@ -107,8 +108,6 @@ public class Compra extends Activity implements OnClickListener {
 		}
 		tabla.addView(fila);
 	}
-
-
 
 	protected void Detalles(Cursor c) {
 		while (c.moveToNext()) {
@@ -134,8 +133,14 @@ public class Compra extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+		int key = v.getId();
+		switch (key) {
+		case R.id.menu:
+			Intent acc = new Intent("com.example.servitek.ACCION");
+			startActivity(acc);
+			break;
+		}
 
 	}
-	
-	
+
 }

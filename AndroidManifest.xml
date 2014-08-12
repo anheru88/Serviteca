@@ -75,17 +75,6 @@
            </intent-filter>
        </activity>
        <activity
-           android:name="com.servitek.vistas.Detalles"
-           android:configChanges="keyboard|keyboardHidden|orientation"
-           android:label="Detalles de comprea"
-           android:screenOrientation="portrait" >
-           <intent-filter>
-               <action android:name="com.example.servitek.DETALLES" />
-
-               <category android:name="android.intent.category.DEFAULT" />
-           </intent-filter>
-       </activity>
-       <activity
            android:name="com.servitek.vistas.Compra"
            android:configChanges="keyboard|keyboardHidden|orientation"
            android:label="Detalles"

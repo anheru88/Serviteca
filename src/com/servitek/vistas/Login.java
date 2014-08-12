@@ -35,6 +35,7 @@ public class Login extends ActionBarActivity implements OnClickListener {
 		me.setOnClickListener(this);
 		db = new Admin_BD(this);
 		db.Escribir();
+		
 		user = (EditText) findViewById(R.id.user);
 		password = (EditText) findViewById(R.id.pass);
 		boton = (Button) findViewById(R.id.bvehi);

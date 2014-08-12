@@ -239,26 +239,12 @@
             android:src="@drawable/ic_launcherg" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/botones"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/guardar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/guardar" />
-
         <Button
             android:id="@+id/menu"
-            android:layout_width="wrap_content"
+            style="@style/MultiGradient"
+            android:layout_width="279dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
             android:text="@string/menu" />
-    </LinearLayout>
 
 </LinearLayout>
