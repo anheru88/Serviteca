@@ -4,7 +4,6 @@ import com.clases.controladores.Admin_BD;
 import com.clases.controladores.BuscarItem;
 import com.clases.controladores.Campo;
 import com.clases.controladores.DBimagen;
-import com.clases.controladores.MensajeToast;
 import com.clases.controladores.Util;
 import com.example.servitek.R;
 
@@ -152,7 +151,7 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 			ComponentesActivar(true);
 			jj.execute(placa.getText().toString());
 		} else {
-			MensajeToast.MensajeCorto(Orden.this,
+			Util.MensajeCorto(Orden.this,
 					"Esta placa no ha sido registrada");
 		}
 		
@@ -239,7 +238,7 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 			servicio.setSelection(0);
 			s = null;
 		} else {
-			MensajeToast.MensajeCorto(this, "Llene todos los campos");
+			Util.MensajeCorto(this, "Llene todos los campos");
 		}
 	}
 
@@ -292,7 +291,7 @@ public class Orden extends ActionBarActivity implements OnClickListener {
 
 		@Override
 		protected void onCancelled() {
-			MensajeToast.MensajeCorto(Orden.this, "Tarea cancelada");
+			Util.MensajeCorto(Orden.this, "Tarea cancelada");
 		}
 		
 	};

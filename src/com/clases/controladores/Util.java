@@ -8,14 +8,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Message;
+import android.view.Gravity;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.servitek.vistas.Vehiculo;
 
 
 public class Util {
+	
+	//////////////////////////////////////Fecha dia 
 	
 	public static String facha() {
 		Calendar hoy = Calendar.getInstance();
@@ -23,6 +29,9 @@ public class Util {
 		String c = formato.format(hoy.getTime()); 
 		return c;
 	}
+	
+	
+	/////////////////////////////////////Color del carro
 	
 	public static void GetColor(final Bitmap bitmap) {
 		Thread color = new Thread(new Runnable() {
@@ -94,6 +103,29 @@ public class Util {
 			}
 		});
 		color.start();
-	}	
+	}
+	
+	/////////////////////////////////// Mensajes 
+	
+	public static void MensajeCorto(Context context, String mensaje) {
+		Toast toast = Toast.makeText(context, mensaje, Toast.LENGTH_SHORT);
+		TextView v = (TextView) toast.getView().findViewById(
+				android.R.id.message);
+		if (v != null)
+			v.setGravity(Gravity.CENTER);
+		v.setTextColor(Color.rgb(225, 216, 79));
+		toast.show();
+	}
+	
+	
+	public static void MensajeLargo(Context context, String mensaje) {
+		Toast toast = Toast.makeText(context, mensaje, Toast.LENGTH_LONG);
+		TextView v = (TextView) toast.getView().findViewById(
+				android.R.id.message);
+		if (v != null)
+			v.setGravity(Gravity.CENTER);
+		v.setTextColor(Color.rgb(225, 216, 79));
+		toast.show();
+	}
 	
 }

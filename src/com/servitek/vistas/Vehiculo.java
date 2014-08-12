@@ -3,7 +3,6 @@ package com.servitek.vistas;
 import com.clases.controladores.Admin_BD;
 import com.clases.controladores.BuscarItem;
 import com.clases.controladores.DBimagen;
-import com.clases.controladores.MensajeToast;
 import com.clases.controladores.Util;
 import com.example.servitek.R;
 
@@ -202,7 +201,7 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 					.toString(), direccion.getText().toString(), celular
 					.getText().toString(), "hola", mail.getText().toString(),
 					placa.getText().toString()) != -1) {
-				MensajeToast.MensajeCorto(this, "Edicion Exitosa");
+				Util.MensajeCorto(this, "Edicion Exitosa");
 				VaciarCampos();
 			}
 		}
@@ -227,16 +226,16 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 							.getSelectedItemPosition(), DBimagen
 							.GetBytes(((BitmapDrawable) imagen.getDrawable())
 									.getBitmap()), sw)) {
-				MensajeToast.MensajeCorto(this, "Registro Exitoso");
+				Util.MensajeCorto(this, "Registro Exitoso");
 				VaciarCampos();
 				placa.setInputType(InputType.TYPE_CLASS_TEXT);
 			} else {
-				MensajeToast.MensajeCorto(this, "Error al registrar");
+				Util.MensajeCorto(this, "Error al registrar");
 			}
 
 		} else {
 			
-			MensajeToast.MensajeCorto(this, "Llene todos los campos");
+			Util.MensajeCorto(this, "Llene todos los campos");
 		}
 	}
 

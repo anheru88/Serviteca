@@ -1,9 +1,5 @@
 package com.servitek.vistas;
 
-
-import com.clases.controladores.Admin_BD;
-import com.example.servitek.R;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,13 +12,21 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.clases.controladores.Admin_BD;
+import com.clases.controladores.Util;
+import com.example.servitek.R;
 
-public class Login extends ActionBarActivity implements OnClickListener{
+public class Login extends ActionBarActivity implements OnClickListener {
 
-	Button boton;
-	EditText user,password;
-	Admin_BD db;
-	CheckBox me;
+	private Button boton;
+	private EditText user, password;
+	private Admin_BD db;
+	private CheckBox me;
+	private String usuario, pass;
+	private SharedPreferences loginPreferences;
+	private SharedPreferences.Editor loginPrefsEditor;
+	private Boolean saveLogin;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,6 +39,16 @@ public class Login extends ActionBarActivity implements OnClickListener{
 		password = (EditText) findViewById(R.id.pass);
 		boton = (Button) findViewById(R.id.bvehi);
 		boton.setOnClickListener(this);
+
+		loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+		loginPrefsEditor = loginPreferences.edit();
+
+		saveLogin = loginPreferences.getBoolean("saveLogin", false);
+		if (saveLogin == true) {
+			user.setText(loginPreferences.getString("username", ""));
+			password.setText(loginPreferences.getString("password", ""));
+			me.setChecked(true);
+		}
 	}
 
 	@Override
@@ -55,7 +69,7 @@ public class Login extends ActionBarActivity implements OnClickListener{
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -65,41 +79,27 @@ public class Login extends ActionBarActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.bvehi) {
-			//if (user.getText().toString().equals("admin") && password.getText().toString().equals("admin")) {
-			Intent intent = new Intent("com.example.servitek.ACCION");
-			startActivity(intent);
-			db.Cerrar();
-		//} else {
-			//Toast toast = Toast.makeText(Login.this, "Usuario o Password invalidos", Toast.LENGTH_SHORT);
-	       // toast.show(); 
-		//}
-		}
-		if (v.getId() == R.id.check) {
-			if(me.isChecked()){
-				String nombre=user.getText().toString();
-				String pass=password.getText().toString();
-				SharedPreferences settings = getSharedPreferences("Perfil", MODE_PRIVATE);
-				SharedPreferences.Editor editor = settings.edit();
-				editor.putString("user",nombre);
-				editor.putString("pass",pass);
-				editor.commit();
-			}else{
-				SharedPreferences settings = getSharedPreferences("Perfil", MODE_PRIVATE);
-				SharedPreferences.Editor editor = settings.edit();
-				editor.putString("user","");
-				editor.putString("pass","");
-				editor.commit();
+			if (user.getText().toString().equals("admin")
+					&& password.getText().toString().equals("admin")) {
+				Intent intent = new Intent("com.example.servitek.ACCION");
+				startActivity(intent);
+				db.Cerrar();
+			} else {
+				Util.MensajeCorto(Login.this, "Usuario o Password invalidos");
 			}
-                 
-		}
-		
-	}
 
-	@Override
-	protected void onStop() {
-		super.onStop();
+			usuario = user.getText().toString();
+			pass = password.getText().toString();
+
+			if (me.isChecked()) {
+				loginPrefsEditor.putBoolean("saveLogin", true);
+				loginPrefsEditor.putString("username", usuario);
+				loginPrefsEditor.putString("password", pass);
+				loginPrefsEditor.commit();
+			} else {
+				loginPrefsEditor.clear();
+				loginPrefsEditor.commit();
+			}
+		}
 	}
-	
-	
-	
 }
