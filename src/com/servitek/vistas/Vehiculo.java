@@ -1,84 +1,67 @@
-package com.example.servitek;
+package com.servitek.vistas;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.clases.controladores.Admin_BD;
+import com.clases.controladores.BuscarItem;
+import com.clases.controladores.DBimagen;
+import com.clases.controladores.Util;
+import com.example.servitek.R;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Vehiculo extends ActionBarActivity implements OnClickListener {
-	EditText placa, cedula, nombre, direccion, celular, modelo, mail;
+	EditText cedula, nombre, direccion, celular, modelo, mail;
+	AutoCompleteTextView placa;
 	Spinner tipo, marca;
 	Button color, guardar, menu, editar;
 	ImageButton borrar, imagen;
 	Intent camara;
-	TextView carcolor;
+	static TextView carcolor;
 	final static int cons = 0;
-	int cc = 0;
+	static int cc = 0;
 	Admin_BD bd;
 	boolean sw = true;
+	BuscarItem buscar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.vehiculo);
 		bd = new Admin_BD(this);
+		bd.Escribir();
+		BusquedaAuto();
 		init();
 	}
 
-	private void init() {
-		placa = (EditText) findViewById(R.id.placa);
-		cedula = (EditText) findViewById(R.id.cedula);
-		nombre = (EditText) findViewById(R.id.nombre);
-		direccion = (EditText) findViewById(R.id.dir);
-		celular = (EditText) findViewById(R.id.tel);
-		modelo = (EditText) findViewById(R.id.model);
-		mail = (EditText) findViewById(R.id.mail);
-		tipo = (Spinner) findViewById(R.id.tipos);
-		marca = (Spinner) findViewById(R.id.marcas);
-		imagen = (ImageButton) findViewById(R.id.foto);
-		borrar = (ImageButton) findViewById(R.id.borrar);
-		menu = (Button) findViewById(R.id.menu);
-		editar = (Button) findViewById(R.id.editar);
-		color = (Button) findViewById(R.id.btcolor);
-		carcolor = (TextView) findViewById(R.id.carcolor);
-		guardar = (Button) findViewById(R.id.guardar);
-
-		imagen.setOnClickListener(this);
-		menu.setOnClickListener(this);
-		editar.setOnClickListener(this);
-		color.setOnClickListener(this);
-		borrar.setOnClickListener(this);
-		guardar.setOnClickListener(this);
-		editar.setEnabled(false);
-		Spinnerbd();
-
+	private void BusquedaAuto() {
+		bd.Leer();
+		placa = (AutoCompleteTextView) findViewById(R.id.Autocom);
+		placa.setThreshold(1);
+		Cursor cursor = bd.AutoComplete("");
+		buscar = new BuscarItem(getApplicationContext(), cursor);
+		placa.setAdapter(buscar);
 		placa.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
@@ -111,20 +94,45 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 				placa.setSelection(placa.getText().length());
 
 				if (aux.length() == 9) {
+					cedula.requestFocus();
 					Cursor c = bd.BuscarPlaca(aux);
 					if (c.moveToFirst()) {
 						LlenarCampos(c);
 						editar.setEnabled(true);
 						DesAct(false, false);
 						OculTeclado(placa);
-					} else {
-						Mensaje("No hay registro");
+						
 					}
-
 				}
 			}
 		});
+	}
 
+	private void init() {
+		cedula = (EditText) findViewById(R.id.cedula);
+		nombre = (EditText) findViewById(R.id.nombre);
+		direccion = (EditText) findViewById(R.id.dir);
+		celular = (EditText) findViewById(R.id.tel);
+		modelo = (EditText) findViewById(R.id.model);
+		mail = (EditText) findViewById(R.id.mail);
+		tipo = (Spinner) findViewById(R.id.tipos);
+		marca = (Spinner) findViewById(R.id.marcas);
+		imagen = (ImageButton) findViewById(R.id.foto);
+		borrar = (ImageButton) findViewById(R.id.borrar);
+		menu = (Button) findViewById(R.id.menu);
+		editar = (Button) findViewById(R.id.editar);
+		color = (Button) findViewById(R.id.btcolor);
+		carcolor = (TextView) findViewById(R.id.carcolor);
+		guardar = (Button) findViewById(R.id.guardar);
+
+		imagen.setOnClickListener(this);
+		menu.setOnClickListener(this);
+		editar.setOnClickListener(this);
+		color.setOnClickListener(this);
+		borrar.setOnClickListener(this);
+		guardar.setOnClickListener(this);
+		editar.setEnabled(false);
+		CargarCursor();
 	}
 
 	protected void OculTeclado(View v) {
@@ -132,16 +140,17 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 		tecladoVirtual.hideSoftInputFromWindow(v.getWindowToken(), 0);
 	}
 
-	private void Spinnerbd() {
-		Cursor tipos = bd.SpinnerTipo();
-		SimpleCursorAdapter adactador1 = new SimpleCursorAdapter(Vehiculo.this,
+	private void CargarCursor() {
+		bd.Leer();
+		Cursor tipos = bd.Cursor("_id", "Nomclase", "Mov_Clases");
+		SimpleCursorAdapter adactador1 = new SimpleCursorAdapter(this,
 				android.R.layout.simple_spinner_dropdown_item, tipos,
 				new String[] { "Nomclase" }, new int[] { android.R.id.text1 },
 				0);
 		tipo.setAdapter(adactador1);
 
-		Cursor marcas = bd.SpinnerMarca();
-		SimpleCursorAdapter adactador2 = new SimpleCursorAdapter(Vehiculo.this,
+		Cursor marcas = bd.Cursor("_id", "nombre", "Mov_Marcas");
+		SimpleCursorAdapter adactador2 = new SimpleCursorAdapter(this,
 				android.R.layout.simple_spinner_dropdown_item, marcas,
 				new String[] { "nombre" }, new int[] { android.R.id.text1 }, 0);
 		marca.setAdapter(adactador2);
@@ -152,6 +161,7 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 		int key = v.getId();
 		switch (key) {
 		case R.id.foto:
+			bd.Cerrar();
 			camara = new Intent(
 					android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(camara, cons);
@@ -165,7 +175,7 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 			OculTeclado(v);
 			break;
 		case R.id.borrar:
-			VaciarCampos();
+			Reset();
 			placa.setInputType(InputType.TYPE_CLASS_TEXT);
 			DesAct(true, true);
 			break;
@@ -187,12 +197,12 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 	private void Editar() {
 		if (!cedula.getText().toString().equals("")
 				&& !nombre.getText().toString().equals("")) {
-			if(bd.EditarCliente(cedula.getText().toString(), nombre.getText()
+			if (bd.EditarCliente(cedula.getText().toString(), nombre.getText()
 					.toString(), direccion.getText().toString(), celular
-					.getText().toString(),"hola", mail.getText().toString(), placa.getText().toString()) != -1){
-				Mensaje("Edicion Exitosa");
-				bd.Cerrar();
-				VaciarCampos();
+					.getText().toString(), "hola", mail.getText().toString(),
+					placa.getText().toString()) != -1) {
+				Util.MensajeCorto(this, "Edicion Exitosa");
+				Reset();
 			}
 		}
 
@@ -213,43 +223,19 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 							.toString(), placa.getText().toString(), marca
 							.getSelectedItemPosition(), cc + "", modelo
 							.getText().toString(), tipo
-							.getSelectedItemPosition(),
-					getBytes(((BitmapDrawable) imagen.getDrawable())
-							.getBitmap()), sw)) {
-				Mensaje("Registro Exitoso");
-				VaciarCampos();
-				placa.setInputType(InputType.TYPE_CLASS_TEXT);
+							.getSelectedItemPosition(), DBimagen
+							.GetBytes(((BitmapDrawable) imagen.getDrawable())
+									.getBitmap()), sw)) {
+				Util.MensajeCorto(this, "Registro Exitoso");
+				Reset();
 			} else {
-				Mensaje("Error al registrar");
+				Util.MensajeCorto(this, "Error al registrar");
 			}
 
 		} else {
-			Mensaje("Campos requeridos vacios");
+			
+			Util.MensajeCorto(this, "Llene todos los campos");
 		}
-	}
-
-	private void Mensaje(String mensaje) {
-		Toast toast = Toast.makeText(this, mensaje, Toast.LENGTH_LONG);
-		TextView v = (TextView) toast.getView().findViewById(
-				android.R.id.message);
-		if (v != null)
-			v.setGravity(Gravity.CENTER);
-		v.setTextColor(Color.rgb(225, 216, 79));
-		toast.show();
-	}
-
-	private void VaciarCampos() {
-		placa.setText("");
-		cedula.setText("");
-		nombre.setText("");
-		direccion.setText("");
-		celular.setText("");
-		mail.setText("");
-		modelo.setText("");
-		tipo.setSelection(0);
-		marca.setSelection(0);
-		carcolor.setBackgroundColor(Color.rgb(255, 255, 255));
-		imagen.setImageDrawable(null);
 	}
 
 	protected void LlenarCampos(Cursor c) {
@@ -264,10 +250,11 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 		direccion.setText(b.getString(3));
 		celular.setText(b.getString(4));
 		mail.setText(b.getString(6));
-		tipo.setSelection((int) bd.CodigoTipo(t));
-		marca.setSelection((int) bd.CodigoMarca(m));
-		bd.Cerrar();
-		imagen.setImageBitmap(GetImage(i));
+		tipo.setSelection((int) bd.CodigoId("Mov_Clases", "codclase", t));
+		marca.setSelection((int) bd.CodigoId("Mov_Marcas", "codmarca", m));
+		imagen.setImageBitmap(DBimagen.GetImage(i));
+		b.close();
+		c.close();
 	}
 
 	private void DesAct(boolean b1, boolean b2) {
@@ -288,13 +275,13 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 
 	private void color_carro() {
 		Bitmap color = ((BitmapDrawable) imagen.getDrawable()).getBitmap();
-		cc = getDominantColor1(color);
-		carcolor.setBackgroundColor(cc);
+		Util.GetColor(color);
 	}
 
 	@Override
 	protected void onActivityResult(int RequesCode, int ResultCode, Intent data) {
 		super.onActivityResult(RequesCode, ResultCode, data);
+		bd.Escribir();
 		if (ResultCode == Activity.RESULT_OK) {
 			Bundle ext = data.getExtras();
 			Bitmap bmt = (Bitmap) ext.get("data");
@@ -302,77 +289,22 @@ public class Vehiculo extends ActionBarActivity implements OnClickListener {
 		}
 	}
 
-	public int getDominantColor1(Bitmap bitmap) {
-
-		if (bitmap == null)
-			throw new NullPointerException();
-
-		int width = bitmap.getWidth();
-		int height = bitmap.getHeight();
-		int size = width * height;
-		int pixels[] = new int[size];
-
-		Bitmap bitmap2 = bitmap.copy(Bitmap.Config.ARGB_4444, false);
-
-		bitmap2.getPixels(pixels, 0, width, 0, 0, width, height);
-
-		final List<HashMap<Integer, Integer>> colorMap = new ArrayList<HashMap<Integer, Integer>>();
-		colorMap.add(new HashMap<Integer, Integer>());
-		colorMap.add(new HashMap<Integer, Integer>());
-		colorMap.add(new HashMap<Integer, Integer>());
-
-		int color = 0;
-		int r = 0;
-		int g = 0;
-		int b = 0;
-		Integer rC, gC, bC;
-		for (int i = 0; i < pixels.length; i++) {
-			color = pixels[i];
-
-			r = Color.red(color);
-			g = Color.green(color);
-			b = Color.blue(color);
-
-			rC = colorMap.get(0).get(r);
-			if (rC == null)
-				rC = 0;
-			colorMap.get(0).put(r, ++rC);
-
-			gC = colorMap.get(1).get(g);
-			if (gC == null)
-				gC = 0;
-			colorMap.get(1).put(g, ++gC);
-
-			bC = colorMap.get(2).get(b);
-			if (bC == null)
-				bC = 0;
-			colorMap.get(2).put(b, ++bC);
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		bd.Cerrar();
+	}
+	
+	public static Handler puente = new Handler() {
+		public void handleMessage(Message msg) {
+			cc = (Integer) msg.obj;
+			carcolor.setBackgroundColor(cc);
 		}
-
-		int[] rgb = new int[3];
-		for (int i = 0; i < 3; i++) {
-			int max = 0;
-			int val = 0;
-			for (Map.Entry<Integer, Integer> entry : colorMap.get(i).entrySet()) {
-				if (entry.getValue() > max) {
-					max = entry.getValue();
-					val = entry.getKey();
-				}
-			}
-			rgb[i] = val;
-		}
-
-		return Color.rgb(rgb[0], rgb[1], rgb[2]);
+	};
+	
+	private void Reset() {
+		Intent intent = getIntent();
+		finish();
+		startActivity(intent);
 	}
-
-	public static byte[] getBytes(Bitmap bitmap) {
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		bitmap.compress(CompressFormat.JPEG, 100, stream);
-		return stream.toByteArray();
-	}
-
-	public static Bitmap GetImage(byte[] image) {
-		return BitmapFactory.decodeByteArray(image, 0, image.length);
-	}
-
 }

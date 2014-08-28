@@ -19,16 +19,18 @@
             <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
-            <EditText
-                android:id="@+id/placa"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" 
-                android:layout_marginTop="3dp"
-                android:background="@drawable/edittext_select" 
-                android:hint="@string/placa"
-                android:textSize="60sp"
-                android:textStyle="bold"
-                android:maxLength="9" />
+            
+            <AutoCompleteTextView 
+            android:id="@+id/Autocom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/edittext_select"
+            android:hint="@string/placa"
+            android:maxLength="9"
+            android:textSize="60sp"
+            android:textStyle="bold"
+            android:completionThreshold="1"/>
             
             <ImageButton 
                 android:layout_width="100dp"
@@ -152,7 +154,7 @@
                 android:adjustViewBounds="true"
                 android:background="#E1D84F"
                 android:contentDescription="@string/fotovehiculo"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcherg" />
         </LinearLayout>
 
         <LinearLayout
@@ -167,21 +169,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/guardar" />
+                android:text="@string/guardar" 
+                style="@style/MultiGradient"/>
             
             <Button
                 android:id="@+id/editar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/editar" />
+                android:text="@string/editar" 
+                style="@style/MultiGradient"/>
 
             <Button
                 android:id="@+id/menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/menu" />
+                android:text="@string/menu" 
+                style="@style/MultiGradient"/>
         </LinearLayout>
     </LinearLayout>
 

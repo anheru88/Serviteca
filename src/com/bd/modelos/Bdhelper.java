@@ -1,9 +1,12 @@
-package com.example.servitek;
+package com.bd.modelos;
+
+
+import com.clases.controladores.Admin_BD;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
+import android.util.Log;
 
 public class Bdhelper extends SQLiteOpenHelper {
 
@@ -27,24 +30,25 @@ public class Bdhelper extends SQLiteOpenHelper {
 			db.execSQL(Admin_BD.sql6);
 			db.execSQL(Admin_BD.sql7);
 			db.execSQL(Admin_BD.sql8);
+			db.execSQL(Admin_BD.sql9);
+			db.execSQL(Admin_BD.sql10);
 			
 			CargarTipos(db);
 			CargarMarcas(db);
 			CargarTecicos(db);
-			//CargarServicios(db);
+			CargarServicios(db);
 		} catch (Exception e) {
-			Toast.makeText(c,"error "+ e, Toast.LENGTH_SHORT).show();
+			Log.d("bd", e+"");
 		}
 		
 	}
-
-	/*
-	 * ALINEACION LAVADO LUBRICACION BALANCEO
-	 */
-
-	/*private void CargarServicios(SQLiteDatabase db) {
-		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES (1258,'ALineacion',,,,,,) ");
-	}*/
+	private void CargarServicios(SQLiteDatabase db) {
+		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('0','Servicios','A','0','0','0','B','c') ");
+		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('159','ALineacion','A','2000','320','50','B','c') ");
+		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('486','Lavado','A','3000','480','150','B','c') ");
+		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('795','Lubricacion','A','4000','720','200','B','c') ");
+		db.execSQL("INSERT INTO Servicios (codser,nomser,codcue,valser,ivaser,tasacomis,codins,concesion) VALUES ('268','Balanceo','A','5000','880','250','B','c') ");
+	}
 
 	private void CargarTecicos(SQLiteDatabase db) {
 		db.execSQL("INSERT INTO Tecnicos (codtec,nomtec,dirtec,teltec) VALUES ('0','Tecnico','tecnico','tecnico')");
@@ -86,7 +90,6 @@ public class Bdhelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS Mov_Colores");
 		db.execSQL("DROP TABLE IF EXISTS Mov_Clases");
 		db.execSQL("DROP TABLE IF EXISTS Mov_Imagenes");
-		
 		onCreate(db);
 
 	}
